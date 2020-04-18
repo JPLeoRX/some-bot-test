@@ -1,6 +1,7 @@
 package example;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -43,19 +44,28 @@ public class MyBot extends TelegramLongPollingBot {
             List<UsersCategory> usersCategoryList = googleSheetsWrapper.getUserCategories();
             Set<String> usersCategoryCommands = usersCategoryList.stream().map(s -> s.getCommand().toLowerCase()).collect(Collectors.toSet());
 
-            // Special case 1 - Image command
-            if (update.getMessage().getText().equalsIgnoreCase("/image")) {
+            // Special case 1 - File command
+            if (update.getMessage().getText().equalsIgnoreCase("/file")) {
+                String imgUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Infiniti_Q50_S_HYBRID_%28V37%29_%E2%80%93_Frontansicht%2C_14._Juni_2014%2C_D%C3%BCsseldorf.jpg/2880px-Infiniti_Q50_S_HYBRID_%28V37%29_%E2%80%93_Frontansicht%2C_14._Juni_2014%2C_D%C3%BCsseldorf.jpg";
+                InputStream is = new URL(imgUrl).openStream();
+                SendDocument message = new SendDocument().setChatId(update.getMessage().getChatId()).setDocument("sample.jpg", is).setCaption("File caption");
+                execute(message);
+            }
+
+            // Special case 2 - Image command
+            else if (update.getMessage().getText().equalsIgnoreCase("/image")) {
                 String imgUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Infiniti_Q50_S_HYBRID_%28V37%29_%E2%80%93_Frontansicht%2C_14._Juni_2014%2C_D%C3%BCsseldorf.jpg/2880px-Infiniti_Q50_S_HYBRID_%28V37%29_%E2%80%93_Frontansicht%2C_14._Juni_2014%2C_D%C3%BCsseldorf.jpg";
                 InputStream is = new URL(imgUrl).openStream();
                 SendPhoto message = new SendPhoto().setChatId(update.getMessage().getChatId()).setPhoto("SomeText", is);
                 execute(message);
             }
 
-            // Special case 2 - Help command
+            // Special case 3 - Help command
             else if (update.getMessage().getText().equalsIgnoreCase("/help")) {
                 String text = "Possible commands: ";
                 for (UsersCategory usersCategory : usersCategoryList)
                     text = text + "\n" + usersCategory.getCommand();
+                text = text + "\n/File";
                 text = text + "\n/Image";
                 SendMessage message = new SendMessage(update.getMessage().getChatId(), text);
                 execute(message);
