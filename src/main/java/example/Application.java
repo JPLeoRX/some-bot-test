@@ -1,10 +1,12 @@
 package example;
 
-import example.telegram_bot.MyBot;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 
-public class ExampleTelegramBot {
+/**
+ * Entry point for bot, run from this class
+ */
+public class Application {
     public static void main(String[] args) {
         // Initialize Api Context
         ApiContextInitializer.init();
