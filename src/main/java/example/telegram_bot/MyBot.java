@@ -1,21 +1,15 @@
 package example.telegram_bot;
 
-import example.google_sheets.GoogleSheersWrapper;
+import example.google_sheets.GoogleSheetsWrapper;
 import example.models.UsersCategory;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class MyBot extends TelegramLongPollingBot {
@@ -43,7 +37,7 @@ public class MyBot extends TelegramLongPollingBot {
 
     private void handleCommand(Update update) {
         try {
-            List<UsersCategory> usersCategoryList = GoogleSheersWrapper.getUserCategories();
+            List<UsersCategory> usersCategoryList = GoogleSheetsWrapper.getUserCategories();
             List<String> usersCategoryCommands = usersCategoryList.stream().map(s -> s.getCommand().toLowerCase()).collect(Collectors.toList());
 
             // Image
@@ -92,7 +86,7 @@ public class MyBot extends TelegramLongPollingBot {
                 // /{sheetName}:{cellName}
                 String sheetName = update.getMessage().getText().split(":")[0].replace("/", "");
                 String cellName = update.getMessage().getText().split(":")[1];
-                String cell = GoogleSheersWrapper.getCell(sheetName, cellName);
+                String cell = GoogleSheetsWrapper.getCell(sheetName, cellName);
                 SendMessage message = new SendMessage(update.getMessage().getChatId(), cell);
                 execute(message);
             }

@@ -6,7 +6,7 @@ import example.models.UsersCategory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoogleSheersWrapper {
+public class GoogleSheetsWrapper {
     public static final String SPREADSHEET_ID = "1yR2EjdHD1mkhYlIwQgHEAJSll2c_JDWtIUFeAYjRWWM";
     public static final String SERVICE_ACCOUNT_EMAIL = "sheets-service-account@sheets-test-274612.iam.gserviceaccount.com";
 
